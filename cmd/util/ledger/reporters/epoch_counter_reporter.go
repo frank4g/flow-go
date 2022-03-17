@@ -26,7 +26,7 @@ func (e *EpochCounterReporter) Name() string {
 	return "EpochCounterReporter"
 }
 
-func (e *EpochCounterReporter) Report(payload []ledger.Payload) error {
+func (e *EpochCounterReporter) Report(payload []ledger.Payload, _ ledger.ExportOutputs) error {
 	script, address, err := ExecuteCurrentEpochScript(e.Chain, payload)
 	if err != nil {
 		e.Log.

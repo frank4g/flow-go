@@ -11,7 +11,7 @@ import (
 )
 
 type ExportReport struct {
-	CurrentStateCommitment  flow.StateCommitment
+	CurrentStateCommitment  string
 	EpochCounter            uint64
 	PreviousStateCommitment flow.StateCommitment
 }
@@ -19,7 +19,6 @@ type ExportReport struct {
 // ExportReporter writes data that can be leveraged outside of extraction
 type ExportReporter struct {
 	Chain                   flow.Chain
-	CurrentStateCommitement flow.StateCommitment
 	Log                     zerolog.Logger
 	PreviousStateCommitment flow.StateCommitment
 }
@@ -28,7 +27,7 @@ func (e *ExportReporter) Name() string {
 	return "ExportReporter"
 }
 
-func (e *ExportReporter) Report(payload []ledger.Payload) error {
+func (e *ExportReporter) Report(payload []ledger.Payload, o ledger.ExportOutputs) error {
 	script, _, err := ExecuteCurrentEpochScript(e.Chain, payload)
 	if err != nil {
 		e.Log.
@@ -37,7 +36,7 @@ func (e *ExportReporter) Report(payload []ledger.Payload) error {
 			Msg("Failed to get epoch counter")
 	}
 	report := ExportReport{
-		CurrentStateCommitment:  e.CurrentStateCommitement,
+		CurrentStateCommitment:  o.CurrentStateCommitement,
 		EpochCounter:            script.Value.ToGoValue().(uint64),
 		PreviousStateCommitment: e.PreviousStateCommitment,
 	}

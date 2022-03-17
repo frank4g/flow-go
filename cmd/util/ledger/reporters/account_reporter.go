@@ -25,10 +25,9 @@ import (
 // AccountReporter iterates through registers keeping a map of register sizes
 // reports on storage metrics
 type AccountReporter struct {
-	Log                      zerolog.Logger
-	PreviousStateCommitement flow.StateCommitment
-	RWF                      ReportWriterFactory
-	Chain                    flow.Chain
+	Log   zerolog.Logger
+	RWF   ReportWriterFactory
+	Chain flow.Chain
 }
 
 var _ ledger.Reporter = &AccountReporter{}
@@ -57,7 +56,7 @@ type momentsRecord struct {
 	Moments int    `json:"moments"`
 }
 
-func (r *AccountReporter) Report(payload []ledger.Payload) error {
+func (r *AccountReporter) Report(payload []ledger.Payload, _ ledger.ExportOutputs) error {
 	rwa := r.RWF.ReportWriter("account_report")
 	rwc := r.RWF.ReportWriter("contract_report")
 	rwm := r.RWF.ReportWriter("moments_report")

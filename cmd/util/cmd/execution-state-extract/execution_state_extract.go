@@ -94,15 +94,13 @@ func extractExecutionState(
 				PreviousStateCommitment: targetHash,
 			},
 			&reporters.EpochCounterReporter{
-				Log:                     log,
-				Chain:                   chain,
-				PreviousStateCommitment: targetHash,
+				Log:   log,
+				Chain: chain,
 			},
 			&reporters.AccountReporter{
-				Log:                      log,
-				Chain:                    chain,
-				PreviousStateCommitement: targetHash,
-				RWF:                      reportFileWriterFactory,
+				Log:   log,
+				Chain: chain,
+				RWF:   reportFileWriterFactory,
 			},
 			reporters.NewFungibleTokenTracker(log, reportFileWriterFactory, chain, []string{reporters.FlowTokenTypeID(chain)}),
 		}
