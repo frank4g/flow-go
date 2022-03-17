@@ -35,6 +35,20 @@ func (e *ExportReporter) Report(payload []ledger.Payload, o ledger.ExportOutputs
 			Err(script.Err).
 			Msg("Failed to get epoch counter")
 	}
+
+	if script.Err == nil && script.Value != nil {
+		epochCounter := script.Value.ToGoValue().(uint64)
+		e.Log.
+			Info().
+			Uint64("epochCounter", epochCounter).
+			Msg("Fetched epoch counter from the FlowEpoch smart contract")
+	} else {
+		e.Log.
+			Error().
+			Err(script.Err).
+			Msg("Failed to get epoch counter")
+	}
+
 	report := ExportReport{
 		CurrentStateCommitment:  o.CurrentStateCommitement,
 		EpochCounter:            script.Value.ToGoValue().(uint64),
