@@ -29,14 +29,8 @@ func (e *ExportReporter) Name() string {
 
 func (e *ExportReporter) Report(payload []ledger.Payload, o ledger.ExportOutputs) error {
 	script, _, err := ExecuteCurrentEpochScript(e.Chain, payload)
-	if err != nil {
-		e.Log.
-			Error().
-			Err(script.Err).
-			Msg("Failed to get epoch counter")
-	}
 
-	if script.Err == nil && script.Value != nil {
+	if err == nil && script.Err == nil && script.Value != nil {
 		epochCounter := script.Value.ToGoValue().(uint64)
 		e.Log.
 			Info().
