@@ -83,19 +83,11 @@ func extractExecutionState(
 	// for sporking as soon as it's generated.
 	if report {
 		log.Info().Msgf("preparing reporter files")
-		reportFileWriterFactory := reporters.NewReportFileWriterFactory(outputDir, log)
-
 		rs = []ledger.Reporter{
-			&reporters.EpochCounterReporter{
+			&reporters.EpochContractReporter{
 				Log:   log,
 				Chain: chain,
 			},
-			&reporters.AccountReporter{
-				Log:   log,
-				Chain: chain,
-				RWF:   reportFileWriterFactory,
-			},
-			reporters.NewFungibleTokenTracker(log, reportFileWriterFactory, chain, []string{reporters.FlowTokenTypeID(chain)}),
 		}
 	}
 
