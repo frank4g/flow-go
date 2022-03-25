@@ -1,9 +1,6 @@
 package reporters
 
 import (
-	"github.com/onflow/cadence"
-	jsoncdc "github.com/onflow/cadence/encoding/json"
-
 	"github.com/rs/zerolog"
 
 	"github.com/onflow/flow-go/cmd/util/ledger/migrations"
@@ -30,15 +27,11 @@ func (e *EpochContractReporter) Report(payload []ledger.Payload) error {
 	ctx := fvm.NewContext(zerolog.Nop(), fvm.WithChain(e.Chain))
 
 	scriptCode := `
-	pub fun main(account: Address, contract: String): String {
-		return String.encodeHex(getAccount(account).contracts.get(name: contract)!.code)
+	pub fun main(): String {
+		return String.encodeHex(getAccount(0x9eca2b38b18b5dfe).contracts.get(name: "FlowIDTableStaking")!.code)
 	}
 	`
 	script := fvm.Script([]byte(scriptCode))
-	script.WithArguments(jsoncdc.MustEncode(
-		cadence.BytesToAddress(flow.HexToAddress("0x9eca2b38b18b5dfe").Bytes())),
-		jsoncdc.MustEncode(cadence.String("FlowIDTableStaking")),
-	)
 
 	err := vm.Run(ctx, script, l, prog)
 	if err != nil {
